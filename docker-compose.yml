@@ -1,0 +1,39 @@
+version: '3.3'
+
+services:
+  web:
+    depends_on:
+    - db
+    image: wordpress:latest
+    volumes:
+    - ./wp-content:/var/www/html/wp-content
+    ports:
+    - "8000:80"
+    container_name: dsd-web
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wpdsd
+      WORDPRESS_DB_PASSWORD: f9eCgBJge5iTBhPs
+      WORDPRESS_DB_NAME: dissidentbooster
+  db:
+    image: mysql:5.7
+    volumes:
+    - ./db_data:/var/lib/mysql
+    container_name: dsd-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
+      MYSQL_DATABASE: dissidentbooster
+      MYSQL_USER: wpdsd
+      MYSQL_PASSWORD: f9eCgBJge5iTBhPs
+  pma:
+    image: phpmyadmin/phpmyadmin:latest
+    links:
+    - db:mysql
+    ports:
+    - "7000:80"
+    container_name: dsd-pma
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
