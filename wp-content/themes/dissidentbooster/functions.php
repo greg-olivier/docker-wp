@@ -20,3 +20,8 @@ add_action( 'init', 'add_main_nav' );
 function add_main_nav() {
 	register_nav_menu('header-menu',__( 'Header Menu' ));
 }
+
+add_action('after_setup_theme', 'post_thumbnails');
+function post_thumbnails() {
+	add_theme_support('post-thumbnails');
+}
