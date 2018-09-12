@@ -1,0 +1,10 @@
+/*
+ * Only import external stylesheets
+ */
+
+@charset 'utf-8';
+
+@import '_global.css';
+@import '_header.css';
+@import '_footer.css';
+@import '_fonts.css';
