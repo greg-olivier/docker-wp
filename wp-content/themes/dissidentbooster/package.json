@@ -5,8 +5,8 @@
   "license": "MIT",
   "description": "Development Environment for Dissident Wordpress",
   "scripts": {
-    "dev": "node ./node_modules/gulp/bin/gulp.js --dev",
-    "build": "node ./node_modules/gulp/bin/gulp.js build --production"
+    "dev": "gulp --dev",
+    "build": "gulp build --production"
   },
   "dependencies": {
     "jquery": "^3.2.1"
@@ -24,10 +24,10 @@
     "gulp-load-plugins": "^1.5.0",
     "gulp-notify": "^3.2.0",
     "gulp-plumber": "^1.2.0",
+    "gulp-sequence": "^1.0.0",
     "gulp-uglify": "^3.0.1",
     "gulp-uglifycss": "^1.1.0",
     "js-yaml": "^3.12.0",
-    "run-sequence": "^2.2.1",
     "webpack": "latest",
     "webpack-stream": "^5.1.1",
     "yargs": "^12.0.2"

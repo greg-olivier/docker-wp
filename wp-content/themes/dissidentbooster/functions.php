@@ -1,6 +1,6 @@
 <?php
 /**
- * Only including external PHP files
+ * Only including PHP files from /inc
  */
 
 // Theme Init

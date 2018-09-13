@@ -1,4 +1,4 @@
-version: '3.3'
+version: '2'
 
 services:
   web:
@@ -6,11 +6,15 @@ services:
     - db
     image: wordpress:latest
     volumes:
-    - ./wp-content:/var/www/html/wp-content
+    - ./wp-content/themes/dissidentbooster:/var/www/html/wp-content/themes/dissidentbooster
+    - ./wp-content/plugins:/var/www/html/wp-content/plugins
+    - ./wp-content/uploads:/var/www/html/wp-content/uploads
     ports:
-    - "8000:80"
+      - "8000:80"
     container_name: dsd-web
     restart: always
+    networks:
+      - dsd
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wpdsd
@@ -22,6 +26,8 @@ services:
     - ./db_data:/var/lib/mysql
     container_name: dsd-db
     restart: always
+    networks:
+      - dsd
     environment:
       MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
       MYSQL_DATABASE: dissidentbooster
@@ -37,3 +43,31 @@ services:
     environment:
       MYSQL_USERNAME: root
       MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
+    networks:
+      - dsd
+  node:
+    restart: always
+    container_name: dsd-dev
+    networks:
+      - dsd
+    depends_on:
+        - web
+    volumes:
+        - ./wp-content/themes/dissidentbooster:/var/www/html/wp-content/themes/dissidentbooster
+        - /var/www/html/wp-content/themes/dissidentbooster/node_modules
+    working_dir: /var/www/html/wp-content/themes/dissidentbooster
+    build:
+      context: .
+      dockerfile: DockerNode
+    tty: true
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+networks:
+  dsd:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
+          gateway: 192.168.0.1

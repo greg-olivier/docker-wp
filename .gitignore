@@ -1,8 +1,11 @@
 # IDE
 .idea/
 
-# dependencies
+# Generated files
+/wp-content/themes/dissidentbooster/assets
+
+# Dependencies
 /wp-content/themes/dissidentbooster/node_modules/
 
-# misc
+# Misc
 .DS_Store

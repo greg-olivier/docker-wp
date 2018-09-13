@@ -3,6 +3,6 @@
 //window.$ = $;
 
 $(document).ready(function(){
-  console.log('Hello Word');
+  console.log('Hello World');
 // Add some code
 })

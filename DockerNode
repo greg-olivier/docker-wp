@@ -1,0 +1,6 @@
+FROM node:8
+
+RUN npm install -g gulp webpack
+RUN npm install
+
+CMD ["run"]

@@ -14,7 +14,6 @@ var gulpif               = require('gulp-if');
 var webpack              = require('webpack');
 var webpackStream        = require('webpack-stream');
 var webpackConfig        = require('./webpack.config.js');
-var runSequence          = require('run-sequence');
 var plumber              = require('gulp-plumber');
 
 
@@ -28,7 +27,7 @@ var uglify       = require('gulp-uglify'); //Minifies JS files
 
 
 // Utility related plugins.
-var notify       = require('gulp-notify'); // Sends message notification to you
+var notify       = require('gulp-notify'); // ###### Can't notify from docker container => to change ######
 var browserSync  = require('browser-sync').create(); // Reloads browser and injects CSS. Time-saving synchronised browser testing.
 var reload       = browserSync.reload; // For manual browser reload.
 
@@ -39,23 +38,10 @@ const PRODUCTION = !!(yargs.argv.production);
 // Check for --development flag unminified with sourcemaps
 const DEV = !!(yargs.argv.dev);
 
-// Load settings from settings.yml
+// Load settings from config.yml
 const { BROWSERSYNC, COMPATIBILITY, REVISIONING, PATHS, PROJECT } = loadConfig();
 
-// Check if file exists synchronously
-function checkFileExists(filepath) {
-  var flag = true;
-  try {
-    fs.accessSync(filepath, fs.F_OK);
-  } catch(e) {
-    flag = false;
-  }
-  return flag;
-}
-
-
-
-// Load default or custom YML config file
+// Load YML config file if exists
 function loadConfig() {
 
   if (checkFileExists('config.yml')) {
@@ -70,11 +56,21 @@ function loadConfig() {
   }
 }
 
+// Check if file exists synchronously
+function checkFileExists(filepath) {
+  var flag = true;
+  try {
+    fs.accessSync(filepath, fs.F_OK);
+  } catch(e) {
+    flag = false;
+  }
+  return flag;
+}
 
 
 /**
-* Task: Webpack.
-*
+* Task: Webpack for JS
+* Processing JS with Webpack according to webpack.config.js
 */
 gulp.task('webpack', function() {
   return gulp.src('src/js/app.js')
@@ -92,24 +88,8 @@ gulp.task('webpack', function() {
 
 
 /**
-* Task: `browser-sync`.
-*
-* Live Reloads, CSS injections, Localhost tunneling.
-*
-*/
-gulp.task( 'browser-sync', function() {
-  browserSync.init({
-    proxy: BROWSERSYNC.url,
-    port:8000,
-    open: true,
-    files: ['./assets'+'/**']
-  });
-});
-
-
-/**
 * Task: `styles`.
-*
+* Concat (@import all files in one), compatibility prefix & minify
 */
 gulp.task('styles', function () {
   return gulp.src( 'src/css/app.css' )
@@ -129,8 +109,57 @@ gulp.task('styles', function () {
 });
 
 
+/**
+* Task: `fonts`.
+* Copy fonts to assets folder
+*/
+gulp.task('fonts', function(){
+  return gulp.src('./src/fonts/**')
+  .pipe(gulp.dest('./assets/fonts'));
+});
+
+
 
 /**
+* Task: `serve`.
+* Watch and reload on change
+*/
+gulp.task('serve', function() {
+  // Tracked files
+  var files = [
+    './assets/css/*.css',
+    './*.php',
+    './assets/js/*.js'
+  ];
+
+  // Initialize browsersync
+  browserSync.init(files, {
+    proxy: "192.168.0.1:8000"
+  });
+  // Watches for file changes and runs specific tasks.
+  gulp.watch(PATHS.js, gulp.series('webpack'));
+  gulp.watch( PATHS.css, gulp.series('styles') );
+  gulp.watch(PATHS.php, reload);
+})
+
+
+/**
+* Init tasks
+*/
+gulp.task('default', gulp.series(gulp.parallel('styles', 'webpack', 'fonts'), 'serve'))
+
+
+/**
+* Build tasks
+*/
+
+gulp.task('build', gulp.series(['styles', 'webpack', 'fonts']))
+
+
+
+
+/**
+* BONUS IMAGES
 * Task: `images`.
 *
 * Minifies PNG, JPEG, GIF and SVG images.
@@ -143,37 +172,8 @@ gulp.task('styles', function () {
 * This task will run only once, if you want to run it
 * again, do it with the command `gulp images`.
 */
-gulp.task( 'images', function() {
-  return gulp.src( PATHS.img )
-  .pipe(gulp.dest( 'assets/img/' ))
-  .pipe( notify( { message: 'TASK: "images" Completed! 💯', onLast: true } ) );
-});
-
-
-gulp.task('copy-fonts', function(){
-  gulp.src('./src/fonts/**')
-  .pipe(gulp.dest('./assets/fonts'));
-});
-
-
-/**
-* Watch Tasks.
-*
-* Watches for file changes and runs specific tasks.
-*/
-
-gulp.task( 'default', function () {
-  gulp.series('browser-sync');
-  gulp.watch('src/js/**/*.js', gulp.series('webpack', reload));
-  gulp.watch( PATHS.css, gulp.series('styles') );
-  //gulp.watch( PATHS.iconfont, [ 'icons' ] ); // Reload on SCSS file changes.
-  gulp.watch( PATHS.php , gulp.series(reload) );
-  gulp.watch( PATHS.img, gulp.series('images', reload) );
-});
-
-
-/**
-* Build tasks
-*/
-
-gulp.task('build', gulp.series(['styles', 'webpack', 'images']))
+// gulp.task( 'images', function() {
+//   return gulp.src( PATHS.img )
+//   .pipe(gulp.dest( 'assets/img/' ))
+//   .pipe( notify( { message: 'TASK: "images" Completed! 💯', onLast: true } ) );
+// });
