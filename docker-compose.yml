@@ -23,7 +23,7 @@ services:
   db:
     image: mysql:5.7
     volumes:
-    - ./db_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
     container_name: dsd-db
     restart: always
     networks:
@@ -36,9 +36,9 @@ services:
   pma:
     image: phpmyadmin/phpmyadmin:latest
     links:
-    - db:mysql
+      - db:mysql
     ports:
-    - "7000:80"
+      - "7000:80"
     container_name: dsd-pma
     environment:
       MYSQL_USERNAME: root
@@ -51,13 +51,12 @@ services:
     networks:
       - dsd
     depends_on:
-        - web
+      - web
     volumes:
-        - ./wp-content/themes/dissidentbooster:/var/www/html/wp-content/themes/dissidentbooster
-        - /var/www/html/wp-content/themes/dissidentbooster/node_modules
+      - ./wp-content/themes/dissidentbooster:/var/www/html/wp-content/themes/dissidentbooster
     working_dir: /var/www/html/wp-content/themes/dissidentbooster
     build:
-      context: .
+      context: ./
       dockerfile: DockerNode
     tty: true
     ports:
