@@ -23,16 +23,16 @@ services:
   db:
     image: mysql:5.7
     volumes:
-      - ./db_data:/var/lib/mysql
+      - ./db/db_dump.sql:/docker-entrypoint-initdb.d/db_dump.sql
     container_name: dsd-db
     restart: always
-    networks:
-      - dsd
     environment:
       MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
       MYSQL_DATABASE: dissidentbooster
       MYSQL_USER: wpdsd
       MYSQL_PASSWORD: f9eCgBJge5iTBhPs
+    networks:
+      - dsd
   pma:
     image: phpmyadmin/phpmyadmin:latest
     links:
