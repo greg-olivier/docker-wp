@@ -1,8 +1,5 @@
 # Dissident Booster Website
-* Install **[Git Large File Storage (LFS)](https://git-lfs.github.com/)**
-```
-git lfs install
-```
+
 * Pull
 ```
 docker-compose up -d
@@ -13,15 +10,8 @@ login: wpdsd
 pass: f9eCgBJge5iTBhPs
 ```
 
-* Access Dev Env on **localhost:3000**
-```
-docker exec -it dsd-dev /bin/bash
-// quit container without terminating it
-// with ctrl+p + crtl+q
+* Access BrowserSync on **localhost:3000**
 
-// inside container
-npm run dev
-```
 
 * Adding new CSS file
 ```

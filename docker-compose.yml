@@ -4,15 +4,15 @@ services:
   web:
     depends_on:
     - db
+    restart: always
     image: wordpress:latest
     volumes:
     - ./wp-content/themes/dissidentbooster:/var/www/html/wp-content/themes/dissidentbooster
     - ./wp-content/plugins:/var/www/html/wp-content/plugins
     - ./wp-content/uploads:/var/www/html/wp-content/uploads
+    container_name: dsd-web
     ports:
       - "8000:80"
-    container_name: dsd-web
-    restart: always
     networks:
       - dsd
     environment:
@@ -37,9 +37,9 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     links:
       - db:mysql
+    container_name: dsd-pma
     ports:
       - "7000:80"
-    container_name: dsd-pma
     environment:
       MYSQL_USERNAME: root
       MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
@@ -48,6 +48,7 @@ services:
   node:
     restart: always
     container_name: dsd-dev
+    image: node_wp:latest
     networks:
       - dsd
     depends_on:
@@ -58,7 +59,7 @@ services:
     build:
       context: ./
       dockerfile: DockerNode
-    tty: true
+    command: [ "npm", "run", "dev"]
     ports:
       - "3000:3000"
       - "3001:3001"
