@@ -18,6 +18,7 @@ var plumber              = require('gulp-plumber');
 
 
 // CSS related plugins.
+var sass         = require('gulp-sass'); // Gulp pluign for Sass compilation.
 var minifycss    = require('gulp-uglifycss'); // Minifies CSS files.
 var autoprefixer = require('gulp-autoprefixer'); // Autoprefixing magic.
 var cssConcat    = require('gulp-concat-css');
@@ -30,6 +31,7 @@ var uglify       = require('gulp-uglify'); //Minifies JS files
 var notify       = require('gulp-notify'); // ###### Can't notify from docker container => to change ######
 var browserSync  = require('browser-sync').create(); // Reloads browser and injects CSS. Time-saving synchronised browser testing.
 var reload       = browserSync.reload; // For manual browser reload.
+var sourcemaps   = require('gulp-sourcemaps'); // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file
 
 
 // Check for --production flag
@@ -91,22 +93,49 @@ gulp.task('webpack', function() {
 * Task: `styles`.
 * Concat (@import all files in one), compatibility prefix & minify
 */
+// gulp.task('styles', function () {
+//   return gulp.src( 'src/css/app.css' )
+//   .pipe(plumber({ errorHandler: function(err) {
+//     notify.onError({
+//       title: "Gulp error in " + err.plugin,
+//       message:  err.toString()
+//     })(err);
+//   }}))
+//   .pipe( cssConcat("app.css") )
+//   .pipe( autoprefixer( COMPATIBILITY ) )
+//   .pipe( gulpif( PRODUCTION, minifycss() ) ) //minifie uniquement en environnment de prod
+//   .pipe( gulp.dest( 'assets/css' ) )
+//   .pipe( browserSync.reload({ stream : true }) )
+//   .pipe( notify( { message: 'TASK: "styles" Completed!', onLast: true } ) )
+//
+// });
+
+
 gulp.task('styles', function () {
-  return gulp.src( 'src/css/app.css' )
-  .pipe(plumber({ errorHandler: function(err) {
+
+   return gulp.src( 'src/scss/app.scss' )
+   .pipe(plumber({ errorHandler: function(err) {
     notify.onError({
       title: "Gulp error in " + err.plugin,
       message:  err.toString()
     })(err);
-  }}))
-  .pipe( cssConcat("app.css") )
-  .pipe( autoprefixer( COMPATIBILITY ) )
-  .pipe( gulpif( PRODUCTION, minifycss() ) ) //minifie uniquement en environnment de prod
-  .pipe( gulp.dest( 'assets/css' ) )
-  .pipe( browserSync.reload({ stream : true }) )
-  .pipe( notify( { message: 'TASK: "styles" Completed!', onLast: true } ) )
+            }}))
+   .pipe( sourcemaps.init() )
+   .pipe( sass( {
+    errLogToConsole: true,
+ 		// 	outputStyle: 'compact'
+ 			outputStyle: 'compressed',
+ 			// outputStyle: 'nested',
+ 			//outputStyle: 'expanded',
+ 		} ) )
+   .pipe( autoprefixer( COMPATIBILITY ) )
+    .pipe(gulpif(!PRODUCTION, $.sourcemaps.write())) //ecrit le sourcemap uniquement en environnement dev
+    .pipe(gulpif(PRODUCTION, minifycss())) //minifie uniquement en environnment de prod
+    .pipe( gulp.dest( 'assets/css' ) )
+    .pipe( browserSync.reload({ stream : true }))
+    .pipe( notify( { message: 'TASK: "styles" Completed!', onLast: true } ) )
 
-});
+  });
 
 
 /**

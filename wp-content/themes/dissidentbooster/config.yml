@@ -22,7 +22,7 @@ PATHS:
     - "!node_modules/**"
     - "!.git/**"
   js:  "src/js/**/*.js"
-  css: "src/css/**/*.css"
+  css: "src/scss/**/*.scss"
   img: "src/img/raw/*.{png,jpg,gif,svg}"
 
   # Paths to JavaScript entry points for webpack to bundle modules

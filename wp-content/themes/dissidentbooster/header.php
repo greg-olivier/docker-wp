@@ -9,9 +9,9 @@
 </head>
 <body <?php body_class(); ?>>
 <header class="banner">
-	<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo('name'); ?></a></h1>
+	<?php if ( has_nav_menu( 'header-menu' ) ) : ?>
+		<div class="navigation-top">
+				<?php get_template_part( 'template-parts/header/header', 'navbar' ); ?>
+			</div>
+	<?php endif; ?>
 </header>
-<?php wp_nav_menu( array(
-        'header-menu' => 'header-menu',
-        'container_class' => 'main-nav'
-));?>

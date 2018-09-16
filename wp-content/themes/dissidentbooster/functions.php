@@ -11,3 +11,6 @@ require get_template_directory() . '/inc/backoffice.php';
 
 // Widgets functions
 require get_template_directory() . '/inc/widgets.php';
+
+// Boostrap Nav Walker
+require get_template_directory() . '/inc/menus.php';
