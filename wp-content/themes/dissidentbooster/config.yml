@@ -18,7 +18,7 @@ PATHS:
   # Path to dist folder
   dist: "assets"
   php:
-    - "**/*.php"
+    - "{*,**/*}.php"
     - "!node_modules/**"
     - "!.git/**"
   js:  "src/js/**/*.js"

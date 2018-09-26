@@ -1,38 +1,43 @@
 version: '2'
 
 services:
-  web:
+  wordpress:
     depends_on:
-    - db
+      - db
     restart: always
-    image: wordpress:latest
+    build:
+      context: ./docker/apache-wordpress
+      dockerfile: DockerWordpress
+      args:
+        - VIRTUAL_HOST=${VIRTUAL_HOST}
     volumes:
-    - ./wp-content/themes/dissidentbooster:/var/www/html/wp-content/themes/dissidentbooster
-    - ./wp-content/plugins:/var/www/html/wp-content/plugins
-    - ./wp-content/uploads:/var/www/html/wp-content/uploads
-    container_name: dsd-web
+      - ./wp-content:/var/www/html/wp-content/
+      - ./logs/apache/:/var/log/apache2/
     ports:
-      - "8000:80"
-    networks:
-      - dsd
+      - "80:80"
+    container_name: dsd-wp
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wpdsd
       WORDPRESS_DB_PASSWORD: f9eCgBJge5iTBhPs
       WORDPRESS_DB_NAME: dissidentbooster
+    networks:
+      - dsd-network
   db:
     image: mysql:5.7
-    volumes:
-      - ./db/db_dump.sql:/docker-entrypoint-initdb.d/db_dump.sql
     container_name: dsd-db
     restart: always
+    volumes:
+      - ./docker/dump-db/db_dump.sql:/docker-entrypoint-initdb.d/db_dump.sql
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
       MYSQL_DATABASE: dissidentbooster
       MYSQL_USER: wpdsd
       MYSQL_PASSWORD: f9eCgBJge5iTBhPs
     networks:
-      - dsd
+      - dsd-network
   pma:
     image: phpmyadmin/phpmyadmin:latest
     links:
@@ -44,30 +49,25 @@ services:
       MYSQL_USERNAME: root
       MYSQL_ROOT_PASSWORD: mLV6FbJ09qs2tfBP
     networks:
-      - dsd
+      - dsd-network
   node:
     restart: always
     container_name: dsd-dev
-    image: node_wp:latest
-    networks:
-      - dsd
-    depends_on:
-      - web
+    image: node:8
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+    links:
+      - wordpress:${VIRTUAL_HOST}
     volumes:
       - ./wp-content/themes/dissidentbooster:/var/www/html/wp-content/themes/dissidentbooster
+      - ./logs/node:/root/.npm/_logs
     working_dir: /var/www/html/wp-content/themes/dissidentbooster
-    build:
-      context: ./
-      dockerfile: DockerNode
-    command: [ "npm", "run", "dev"]
+    command: bash -c "npm install && npm install -g gulp && npm run dev"
     ports:
       - "3000:3000"
       - "3001:3001"
+    networks:
+      - dsd-network
 networks:
-  dsd:
+  dsd-network:
     driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.0.0/24
-          gateway: 192.168.0.1

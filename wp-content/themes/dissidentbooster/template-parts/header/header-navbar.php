@@ -8,5 +8,5 @@
 
   <div id="navbar" class="navbar-collapse collapse">
     <?php bootstrap_nav(); ?>
-  </div><!--/.nav-collapse -->
+  </div>
 </nav>

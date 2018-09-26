@@ -5,8 +5,8 @@
   "license": "MIT",
   "description": "Development Environment for Dissident Wordpress",
   "scripts": {
-    "dev": "gulp --dev",
-    "build": "gulp --production"
+    "dev": "node node_modules/gulp/bin/gulp.js --dev",
+    "build": "node node_modules/gulp/bin/gulp.js --production"
   },
   "dependencies": {
     "bootstrap": "^4.1.3",

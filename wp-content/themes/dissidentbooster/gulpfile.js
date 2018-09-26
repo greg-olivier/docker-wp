@@ -30,7 +30,6 @@ var uglify       = require('gulp-uglify'); //Minifies JS files
 // Utility related plugins.
 var notify       = require('gulp-notify'); // ###### Can't notify from docker container => to change ######
 var browserSync  = require('browser-sync').create(); // Reloads browser and injects CSS. Time-saving synchronised browser testing.
-var reload       = browserSync.reload; // For manual browser reload.
 var sourcemaps   = require('gulp-sourcemaps'); // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file
 
 
@@ -137,6 +136,10 @@ gulp.task('styles', function () {
 
   });
 
+  gulp.task('bs-reload', function (done) {
+    browserSync.reload();
+    done()
+  });
 
 /**
 * Task: `fonts`.
@@ -156,19 +159,21 @@ gulp.task('fonts', function(){
 gulp.task('serve', function() {
   // Tracked files
   var files = [
+    './assets/js/*.js',
     './assets/css/*.css',
-    './*.php',
-    './assets/js/*.js'
+    PATHS.php
   ];
 
   // Initialize browsersync
   browserSync.init(files, {
-    proxy: "192.168.0.1:8000"
+    proxy: process.env.VIRTUAL_HOST,
+    open: false
   });
+
   // Watches for file changes and runs specific tasks.
-  gulp.watch(PATHS.js, gulp.series('webpack'));
-  gulp.watch( PATHS.css, gulp.series('styles') );
-  gulp.watch(PATHS.php, reload);
+  gulp.watch(PATHS.js, gulp.series('webpack', 'bs-reload'));
+  gulp.watch(PATHS.css, gulp.series('styles', 'bs-reload'));
+  gulp.watch(PATHS.php, gulp.series('bs-reload'));
 })
 
 
