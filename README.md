@@ -36,7 +36,7 @@ cd example.com
 
 * Rename .env.sample in .env & declare your ENV variables
 
-* Add phpMyAdmin host in /etc/hosts
+* Add vhosts in /etc/hosts
 ```
 echo '127.0.0.1 example.com www.example.com dev.example.com www.dev.example.com' | sudo tee -a /etc/hosts
 ```
