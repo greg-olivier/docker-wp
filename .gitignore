@@ -2,13 +2,44 @@
 .idea/
 
 # Generated files
-/wp-content/themes/dissidentbooster/assets
+/**/www/wp-content/themes/**/assets
+/**/www/wp-content/themes/**/package-lock.json
+nginx-proxy/certs/
+nginx-proxy/conf.d/
+nginx-proxy/vhost.d/
+nginx-proxy/html/
 
 # Dependencies
-/wp-content/themes/dissidentbooster/node_modules/
+/**/www/wp-content/themes/**/node_modules/
 
 # Logs
-/logs/
+*.log
 
 # Misc
 .DS_Store
+
+# Environment
+.env
+
+# Wordpress
+wp-config.php
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/mu-plugins/
+wp-content/wp-cache-config.php
+wp-content/plugins/hello.php
+
+/.htaccess
+/license.txt
+/readme.html
+/sitemap.xml
+/sitemap.xml.gz
+
+
+# Database
+/**/database1/

@@ -1,33 +1,62 @@
 # Dissident Booster Website
 
-* Pull
+* Prerequisites : Install [Docker](https://www.docker.com/get-started)
+* This project use [nginx-proxy/jwilder](https://github.com/jwilder/nginx-proxy)
+
+* First, need to create docker network for proxy
+```
+docker network create nginx-proxy
+```
+
+* Start Nginx proxy
+```
+cd nginx-proxy
+docker-compose up -d
+```
+
+* Add hosts in /etc/hosts (Wordpress, phpMyAdmin, dev server)
+```
+echo '127.0.0.1 example.com pma.example.com dev.example.com' | sudo tee -a /etc/hosts
+```
+
+* Go in your project folder
+```
+cd example.com
+```
+
+* Rename .env.sample in .env & declare your ENV variables
+
+* Compose your setup
 ```
 docker-compose up -d
 ```
 
-* Stop all running containers
+* Good to know
 ```
+// Stop all running containers
 docker stop $(docker ps -q)
+
+// Remove all containers
+docker rm $(docker ps -a -q)
 ```
 
-* Add line below to your /etc/hosts file
+* Info : Click accept on the warning about self-signed certs :)
+
+* Access on **https://example.com for live version**
 ```
-127.0.0.1       dissidentbooster.fr
+login: your-login
+pass: your-password
 ```
 
-* Access on **http://dissidentbooster.fr(:80) for live version**
-```
-login: wpdsd
-pass: f9eCgBJge5iTBhPs
-```
+* Access on **https://pma.example.com for phpMyAdmin**
 
-* Access on **http://dissidentbooster.fr:3000 for dev version**
+
+* Access on **http://dev.example.com for dev version with BrowserSync**
+* --> NO HTTPS ON DEV MODE
 * (You have to wait few minutes to access to this url until NPM finish to install all dependencies)
 
 
-* Access on **http://dissidentbooster.fr:7000 for phpMyAdmin**
-
-
+# My Theme (with Bootstrap 4.0) in /www/wp-content/themes/my-theme
 * Adding new CSS file
 ```
 // Create your file in src/css
@@ -38,3 +67,10 @@ pass: f9eCgBJge5iTBhPs
 * Adding new JS file
 Create your file in src/js.
 Webpack bundles all files in one
+
+
+# Add WP website (without Theme development config: Gulp, BrowserSync, Webpack)
+* Copy docker-compose.yml & .env.sample in your project folder
+* Delete Node block in docker-compose.yml and change volume name of db (ex: database3)
+* Rename .env.sample in .env, declare your ENV variables & comment WORDPRESS_THEME_NAME
+* Add hosts in /etc/hosts (Wordpress: host.domain, phpMyAdmin: pma.host.domain)
