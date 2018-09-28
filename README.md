@@ -36,6 +36,11 @@ cd example.com
 
 * Rename .env.sample in .env & declare your ENV variables
 
+* Add phpMyAdmin host in /etc/hosts
+```
+echo '127.0.0.1 example.com www.example.com dev.example.com www.dev.example.com' | sudo tee -a /etc/hosts
+```
+
 * Compose your setup
 ```
 docker-compose up -d
@@ -73,8 +78,7 @@ Create your file in src/js.
 Webpack bundles all files in one
 
 
-# Add WP website (without Theme development config)
-* Copy docker-compose.yml & .env.sample in your project folder
-* Delete Node block in docker-compose.yml
-* Rename .env.sample in .env, declare your ENV variables & comment WORDPRESS_THEME_NAME
+# Add WP website (with Theme development config)
+* Copy docker-compose.yml && /themes && .env.sample in your project folder
+* Rename .env.sample in .env, declare your ENV variables
 * Add your vhost in /etc/hosts

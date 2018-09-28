@@ -2,42 +2,47 @@ version: '2'
 
 services:
   wordpress:
-    restart: always
     image: wordpress:4.9.8-php7.1-apache
-    volumes:
-      - ./www:/var/www/html/
-      - ./logs/apache/:/var/log/apache2/
+    container_name: ${PROJECT_NAME}-wp
+    restart: always
     external_links:
       - mysql-db
     expose:
       - ${VIRTUAL_PORT}
-    container_name: ${VIRTUAL_HOST}-wp
+    volumes:
+      - ./themes:/var/www/html/wp-content/themes
+      - ./plugins:/var/www/html/wp-content/plugins
+      - ./uploads:/var/www/html/wp-content/uploads
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./logs/apache/:/var/log/apache2/
     environment:
       WORDPRESS_DB_HOST: mysql-db:3306
       WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
-      WORDPRESS_DB_NAME: ${VIRTUAL_HOST}
-      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      WORDPRESS_DB_NAME: ${PROJECT_NAME}
+      VIRTUAL_HOST: ${VIRTUAL_HOST_WP}
       VIRTUAL_PORT: ${VIRTUAL_PORT}
-      LETSENCRYPT_HOST: ${VIRTUAL_HOST}
+      LETSENCRYPT_HOST: ${VIRTUAL_HOST_WP}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+
   node:
-    restart: always
-    container_name: ${VIRTUAL_HOST}-dev
     image: node:8
-    environment:
-      VIRTUAL_HOST: dev.${VIRTUAL_HOST}
-      BROWSERSYNC_PROXY: ${VIRTUAL_HOST}
-      VIRTUAL_PORT: ${VIRTUAL_PORT}
+    container_name: ${PROJECT_NAME}-dev
+    restart: always
     links:
-      - wordpress:${VIRTUAL_HOST}
-    volumes:
-      - ./www/wp-content/themes/${WORDPRESS_THEME_NAME}:/var/www/html/wp-content/themes/${WORDPRESS_THEME_NAME}
-      - ./logs/node:/root/.npm/_logs
-    working_dir: /var/www/html/wp-content/themes/${WORDPRESS_THEME_NAME}
-    command: bash -c "npm install && npm install -g gulp && npm run dev"
+      - wordpress:${BROWSERSYNC_PROXY}
     expose:
       - ${VIRTUAL_PORT}
+    volumes:
+      - ./themes/my-theme:/var/www/html/wp-content/themes/my-theme
+      - ./logs/node:/root/.npm/_logs
+    working_dir: /var/www/html/wp-content/themes/my-theme
+    command: bash -c "npm install && npm run dev"
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST_DEV}
+      BROWSERSYNC_PROXY: ${BROWSERSYNC_PROXY}
+      VIRTUAL_PORT: ${VIRTUAL_PORT}
+
 networks:
   default:
     external:

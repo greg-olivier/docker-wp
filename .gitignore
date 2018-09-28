@@ -14,25 +14,13 @@
 /**/sql_db/
 
 # Wordpress
-/**/www/wp-config.php
-/**/www/wp-content/advanced-cache.php
-/**/www/wp-content/backup-db/
-/**/www/wp-content/backups/
-/**/www/wp-content/blogs.dir/
-/**/www/wp-content/cache/
-/**/www/wp-content/upgrade/
-/**/www/wp-content/uploads/
-/**/www/wp-content/mu-plugins/
-/**/www/wp-content/wp-cache-config.php
-/**/www/wp-content/plugins/hello.php
-/**/www/.htaccess
-/**/www/license.txt
-/**/www/readme.html
-/**/www/sitemap.xml
-/**/www/sitemap.xml.gz
+/**/plugins/
+/**/uploads/
+/**/themes/*
+!/**/themes/my-theme/
 
 # Dependencies
-/**/www/wp-content/themes/**/node_modules/
+/**/themes/**/node_modules/
 
 # Generated files
 /**/www/wp-content/themes/**/assets
