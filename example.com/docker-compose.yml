@@ -2,53 +2,43 @@ version: '2'
 
 services:
   wordpress:
-    depends_on:
-      - db
     restart: always
     image: wordpress:4.9.8-php7.1-apache
     volumes:
       - ./www:/var/www/html/
       - ./logs/apache/:/var/log/apache2/
+    external_links:
+      - mysql-db
     expose:
       - ${VIRTUAL_PORT}
     container_name: ${VIRTUAL_HOST}-wp
     environment:
-      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_HOST: mysql-db:3306
       WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
-      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_NAME: ${VIRTUAL_HOST}
       VIRTUAL_HOST: ${VIRTUAL_HOST}
       VIRTUAL_PORT: ${VIRTUAL_PORT}
       LETSENCRYPT_HOST: ${VIRTUAL_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
-  db:
-    image: mysql:5.7
-    container_name: ${VIRTUAL_HOST}-db
+  node:
     restart: always
-    expose:
-      - 3306
-    volumes:
-      - ./database1:/var/lib/mysql
+    container_name: ${VIRTUAL_HOST}-dev
+    image: node:8
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-  pma:
-    image: phpmyadmin/phpmyadmin:latest
+      VIRTUAL_HOST: dev.${VIRTUAL_HOST}
+      BROWSERSYNC_PROXY: ${VIRTUAL_HOST}
+      VIRTUAL_PORT: ${VIRTUAL_PORT}
     links:
-      - db:mysql
-    container_name: ${VIRTUAL_HOST}-pma
+      - wordpress:${VIRTUAL_HOST}
+    volumes:
+      - ./www/wp-content/themes/${WORDPRESS_THEME_NAME}:/var/www/html/wp-content/themes/${WORDPRESS_THEME_NAME}
+      - ./logs/node:/root/.npm/_logs
+    working_dir: /var/www/html/wp-content/themes/${WORDPRESS_THEME_NAME}
+    command: bash -c "npm install && npm install -g gulp && npm run dev"
     expose:
       - ${VIRTUAL_PORT}
-    environment:
-      MYSQL_USERNAME: ${DB_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      VIRTUAL_HOST: pma.${VIRTUAL_HOST}
-      VIRTUAL_PORT: ${VIRTUAL_PORT}
-      LETSENCRYPT_HOST: ${VIRTUAL_HOST}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
 networks:
   default:
     external:
-      name: nginx-proxy
+      name: wp-dev-env

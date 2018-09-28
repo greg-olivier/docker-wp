@@ -1,23 +1,33 @@
-# Dissident Booster Website
-
 * Prerequisites : Install [Docker](https://www.docker.com/get-started)
 * This project use [nginx-proxy/jwilder](https://github.com/jwilder/nginx-proxy)
 
+# Prepare your environment
+
 * First, need to create docker network for proxy
 ```
-docker network create nginx-proxy
+docker network create wp-dev-env
 ```
 
-* Start Nginx proxy
+* Go in your nginx_sql folder
 ```
-cd nginx-proxy
+cd nginx-sql
+```
+
+* Rename .env.sample in .env & declare your ENV variables
+
+* Add phpMyAdmin host in /etc/hosts
+```
+echo '127.0.0.1 phpmyadmin.sql' | sudo tee -a /etc/hosts
+```
+
+* Start Nginx and SQL containers
+```
+cd nginx-sql
 docker-compose up -d
 ```
 
-* Add hosts in /etc/hosts (Wordpress, phpMyAdmin, dev server)
-```
-echo '127.0.0.1 example.com pma.example.com dev.example.com' | sudo tee -a /etc/hosts
-```
+
+# Run your Wordpress install
 
 * Go in your project folder
 ```
@@ -40,20 +50,14 @@ docker stop $(docker ps -q)
 docker rm $(docker ps -a -q)
 ```
 
-* Info : Click accept on the warning about self-signed certs :)
+* Info : Click accept on the warning about self-signed certs on browser :)
 
 * Access on **https://example.com for live version**
-```
-login: your-login
-pass: your-password
-```
-
-* Access on **https://pma.example.com for phpMyAdmin**
-
 
 * Access on **http://dev.example.com for dev version with BrowserSync**
-* --> NO HTTPS ON DEV MODE
 * (You have to wait few minutes to access to this url until NPM finish to install all dependencies)
+* --> NO HTTPS ON DEV MODE
+
 
 
 # My Theme (with Bootstrap 4.0) in /www/wp-content/themes/my-theme
@@ -69,8 +73,8 @@ Create your file in src/js.
 Webpack bundles all files in one
 
 
-# Add WP website (without Theme development config: Gulp, BrowserSync, Webpack)
+# Add WP website (without Theme development config)
 * Copy docker-compose.yml & .env.sample in your project folder
-* Delete Node block in docker-compose.yml and change volume name of db (ex: database3)
+* Delete Node block in docker-compose.yml
 * Rename .env.sample in .env, declare your ENV variables & comment WORDPRESS_THEME_NAME
-* Add hosts in /etc/hosts (Wordpress: host.domain, phpMyAdmin: pma.host.domain)
+* Add your vhost in /etc/hosts

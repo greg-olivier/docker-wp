@@ -1,45 +1,43 @@
+# Misc
+.DS_Store
+
 # IDE
 .idea/
-
-# Generated files
-/**/www/wp-content/themes/**/assets
-/**/www/wp-content/themes/**/package-lock.json
-nginx-proxy/certs/
-nginx-proxy/conf.d/
-nginx-proxy/vhost.d/
-nginx-proxy/html/
-
-# Dependencies
-/**/www/wp-content/themes/**/node_modules/
 
 # Logs
 *.log
 
-# Misc
-.DS_Store
-
 # Environment
 .env
 
+# Datas
+/**/sql_db/
+
 # Wordpress
-wp-config.php
-wp-content/advanced-cache.php
-wp-content/backup-db/
-wp-content/backups/
-wp-content/blogs.dir/
-wp-content/cache/
-wp-content/upgrade/
-wp-content/uploads/
-wp-content/mu-plugins/
-wp-content/wp-cache-config.php
-wp-content/plugins/hello.php
+/**/www/wp-config.php
+/**/www/wp-content/advanced-cache.php
+/**/www/wp-content/backup-db/
+/**/www/wp-content/backups/
+/**/www/wp-content/blogs.dir/
+/**/www/wp-content/cache/
+/**/www/wp-content/upgrade/
+/**/www/wp-content/uploads/
+/**/www/wp-content/mu-plugins/
+/**/www/wp-content/wp-cache-config.php
+/**/www/wp-content/plugins/hello.php
+/**/www/.htaccess
+/**/www/license.txt
+/**/www/readme.html
+/**/www/sitemap.xml
+/**/www/sitemap.xml.gz
 
-/.htaccess
-/license.txt
-/readme.html
-/sitemap.xml
-/sitemap.xml.gz
+# Dependencies
+/**/www/wp-content/themes/**/node_modules/
 
-
-# Database
-/**/database1/
+# Generated files
+/**/www/wp-content/themes/**/assets
+/**/www/wp-content/themes/**/package-lock.json
+nginx_sql/nginx-proxy/certs/
+nginx_sql/nginx-proxy/conf.d/
+nginx_sql/nginx-proxy/vhost.d/
+nginx_sql/nginx-proxy/html/

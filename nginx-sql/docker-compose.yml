@@ -1,0 +1,62 @@
+version: "2"
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    container_name: nginx-proxy
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-proxy/certs:/etc/nginx/certs:ro
+      - ./nginx-proxy/conf.d:/etc/nginx/conf.d
+      - ./nginx-proxy/vhost.d:/etc/nginx/vhost.d
+      - ./nginx-proxy/html:/usr/share/nginx/html
+      - ./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx-proxy/logs/:/var/log/nginx/
+    restart: unless-stopped
+
+  nginx-proxy-companion:
+    container_name: nginx-proxy-companion
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: unless-stopped
+    volumes:
+      - ./nginx-proxy/certs:/etc/nginx/certs
+      - ./nginx-proxy/conf.d:/etc/nginx/conf.d
+      - ./nginx-proxy/vhost.d:/etc/nginx/vhost.d
+      - ./nginx-proxy/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      NGINX_PROXY_CONTAINER: "nginx-proxy"
+
+  db:
+    image: mysql:5.7
+    container_name: mysql-db
+    restart: always
+    expose:
+      - 3306
+    volumes:
+      - ./sql_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+
+  pma:
+    image: phpmyadmin/phpmyadmin:latest
+    links:
+      - db:mysql
+    container_name: mysql-pma
+    expose:
+      - ${VIRTUAL_PORT}
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      VIRTUAL_PORT: ${VIRTUAL_PORT}
+
+networks:
+  default:
+    external:
+      name: wp-dev-env
