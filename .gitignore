@@ -25,7 +25,7 @@
 # Generated files
 /**/www/wp-content/themes/**/assets
 /**/www/wp-content/themes/**/package-lock.json
-nginx_sql/nginx-proxy/certs/
-nginx_sql/nginx-proxy/conf.d/
-nginx_sql/nginx-proxy/vhost.d/
-nginx_sql/nginx-proxy/html/
+nginx-sql/nginx-proxy/certs/
+nginx-sql/nginx-proxy/conf.d/
+nginx-sql/nginx-proxy/vhost.d/
+nginx-sql/nginx-proxy/html/
