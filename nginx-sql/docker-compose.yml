@@ -18,6 +18,8 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy/logs/:/var/log/nginx/
     restart: unless-stopped
+    environment:
+      COMPOSE_CONVERT_WINDOWS_PATHS : ${COMPOSE_CONVERT_WINDOWS_PATHS}
 
   nginx-proxy-companion:
     container_name: nginx-proxy-companion
@@ -31,6 +33,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       NGINX_PROXY_CONTAINER: "nginx-proxy"
+      COMPOSE_CONVERT_WINDOWS_PATHS : ${COMPOSE_CONVERT_WINDOWS_PATHS}
 
   db:
     image: mysql:5.7

@@ -17,7 +17,7 @@ cd nginx-sql
 
 * Add phpMyAdmin host in /etc/hosts
 ```
-echo '127.0.0.1 phpmyadmin.sql' | sudo tee -a /etc/hosts
+echo '127.0.0.1 phpmyadmin.sql www.phpmyadmin.sql' | sudo tee -a /etc/hosts
 ```
 
 * Start Nginx and SQL containers
