@@ -1,0 +1,63 @@
+# Autoprefixer will make sure your CSS works with these browsers
+COMPATIBILITY:
+  - "last 2 versions"
+  - "ie >= 9"
+  - "ios >= 7"
+
+#project name
+PROJECT:
+  name: "Dissident Booster"
+
+# Gulp will reference these paths when it copies files
+THEME_PATHS:
+
+  # THEME WEBPACK
+  webpackEntry: "themes/my-theme/src/js/app.js"
+
+  # THEME SCSS
+  scssEntry: "themes/my-theme/src/scss/app.scss"
+
+  # TRACKED FILES (Browsersync)
+  phpTrack: "./themes/my-theme/{*,**/*}.php"
+  jsTrack: "./themes/my-theme/assets/js/*.js"
+  cssTrack: "./themes/my-theme/assets/css/*.css"
+
+  # THEME SRC
+  jsSrc:  "./themes/my-theme/{*,**/}src/js/**/*.js"
+  cssSrc: "themes/my-theme/src/scss/**/*.scss"
+  imgSrc: "./themes/my-theme/{*,**/}src/img/raw/*.{png,jpg,gif,svg}"
+  fontSrc: "./themes/my-theme/src/fonts/**"
+
+  # THEME DIST
+  jsDist:  "./themes/my-theme/assets/js/"
+  cssDist: "./themes/my-theme/assets/css/"
+  imgDist: "./themes/my-theme/assets/img/"
+  fontDist: "./themes/my-theme/assets/fonts/"
+
+
+
+
+PLUGIN_PATHS:
+  # THEME WEBPACK
+  #webpackEntry: "./plugins/my-plugin/src/js/app.js"
+
+  # THEME SCSS
+  #scssEntry: "./plugins/my-plugin/src/scss/app.scss"
+
+  # TRACKED FILES (Browsersync)
+  #phpTrack: "./plugins/my-plugin/{*,**/*}.php"
+  #jsTrack: "./plugins/my-plugin/assets/js/*.js"
+  #cssTrack: "./plugins/my-plugin/assets/css/*.css"
+
+  # PLUGIN SRC
+  #jsSrc:  "./plugins/my-plugin/{*,**/}src/js/**/*.js"
+  #cssSrc: "./plugins/my-plugin/{*,**/}src/scss/**/*.scss"
+  #imgSrc: "./plugins/my-plugin/{*,**/}src/img/raw/*.{png,jpg,gif,svg}"
+  #fontSrc: "./plugins/my-plugin/src/fonts/**"
+
+  # PLUGIN DIST
+  #jsDist:  "./plugins/my-plugin/assets/js/"
+  #cssDist: "./plugins/my-plugin/assets/css/"
+  #imgDist: "./plugins/my-plugin/assets/img/"
+  #fontDist: "./plugins/my-plugin/assets/fonts/"
+

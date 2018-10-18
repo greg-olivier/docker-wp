@@ -20,12 +20,12 @@
 !/**/themes/my-theme/
 
 # Dependencies
-/**/themes/**/node_modules/
+/**/wp-content/node_modules/
 
 # Generated files
-/**/www/wp-content/themes/**/assets
-/**/www/wp-content/themes/**/package-lock.json
-nginx-sql/nginx-proxy/certs/
+/**/wp-content/themes/my-theme/assets/**
+/**/wp-content/package-lock.json
+nginx-sql/nginx-proxy/certs/**
 nginx-sql/nginx-proxy/conf.d/
 nginx-sql/nginx-proxy/vhost.d/
 nginx-sql/nginx-proxy/html/
