@@ -14,7 +14,8 @@
 /**/sql_db/
 
 # Wordpress
-/**/plugins/
+/**/wp-content/plugins/*
+!/**/plugins/my-plugin/
 /**/uploads/
 /**/themes/*
 !/**/themes/my-theme/
